@@ -35,9 +35,9 @@ services:
       - .:/go/mall-swarm
     privileged: true
     restart: always
+    spull_policy: never # 禁止从远程仓库拉取镜像，只使用本地镜像
     networks:
       - mall_net
-    pull_policy: never # 禁止从远程仓库拉取镜像，只使用本地镜像
 
 networks:
   mall_net:

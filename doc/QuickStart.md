@@ -60,7 +60,7 @@ Prometheus: http://127.0.0.1:9090/
 
 Grafana: http://127.0.0.1:3001/  ， 默认账号、密码都是admin
 
-Akhq: http://127.0.0.1:9050/  ， 默认账号、密码都是admin
+[//]: # (Akhq: http://127.0.0.1:9050/  ， 默认账号、密码都是admin)
 
 Mysql :  自行客户端工具(Navicat、Sequel Pro)查看
 
