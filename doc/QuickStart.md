@@ -109,3 +109,6 @@ $ docker-compose up -d
 #### 6、查看项目运行情况
 
 访问 http://127.0.0.1:9090/ ， 点击上面菜单“Status”，在点击Targets ,蓝色的就是启动成了，红色就是没启动成功
+
+访问API接口：
+http://127.0.0.1:8888/usercenter/v1/user/registers

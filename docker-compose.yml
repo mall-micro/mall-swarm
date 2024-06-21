@@ -41,7 +41,8 @@ services:
 
 networks:
   mall_net:
+    external: true
     driver: bridge
     ipam:
       config:
-        - subnet: 192.168.1.0/24
+        - subnet: 172.20.0.0/16
