@@ -112,3 +112,21 @@ $ docker-compose up -d
 
 访问API接口：
 http://127.0.0.1:8888/usercenter/v1/user/registers
+
+# 二 项目架构图
+![img_1.png](images/img_1.png)
+
+# 三、本项目镜像介绍
+![img.png](images/img.png)
+* nginx : 网关 （nginx->api->rpc）
+* kafka ：业务使用的kafka
+* zookeeper: kafka依赖的zookeeper
+* redis：业务使用的redis
+* mysql: 业务使用的数据库
+* prometheus: 监控业务
+* grafana: prometheus的ui很难看，用来显示prometheus收集来的数据
+* elastic/filebeat： 收集日志到kafka
+* go-stash : 消费kafka中日志，脱敏、过滤然后输出到es
+* elasticsearch：存储收集的日志
+* kibana：显示elasticsearch
+* jaeger：链路追踪
