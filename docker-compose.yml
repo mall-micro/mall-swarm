@@ -9,9 +9,9 @@ services:
     restart: always
     privileged: true
     environment:
-      - TZ=Asia/Shanghai
+      TZ: ${TZ}
     ports:
-      - 8888:8081
+      - "${NGINX_PORT}:8081"
     volumes:
       - ./deploy/nginx/conf.d:/etc/nginx/conf.d
       - ./data/nginx/log:/var/log/nginx
@@ -28,7 +28,7 @@ services:
     container_name: mall-swarm
     environment:
       # 时区上海 - Timezone Shanghai
-      TZ: Asia/Shanghai
+      TZ: ${TZ}
       GOPROXY: https://goproxy.cn,direct
     working_dir: /go/mall-swarm
     volumes:
@@ -42,7 +42,7 @@ services:
 networks:
   mall_net:
     external: true
-    driver: bridge
+    driver: ${NETWORKS_DRIVER}
     ipam:
       config:
         - subnet: 172.20.0.0/16

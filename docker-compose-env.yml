@@ -8,13 +8,13 @@ services:
     container_name: jaeger
     restart: always
     ports:
-      - "5775:5775/udp"
-      - "6831:6831/udp"
-      - "6832:6832/udp"
-      - "5778:5778"
-      - "16686:16686"
-      - "14268:14268"
-      - "9411:9411"
+      - "${JAEGER_PORT_UDP_1}:5775/udp"
+      - "${JAEGER_PORT_UDP_2}:6831/udp"
+      - "${JAEGER_PORT_UDP_3}:6832/udp"
+      - "${JAEGER_PORT_1}:5778"
+      - "${JAEGER_PORT_2}:16686"
+      - "${JAEGER_PORT_3}:14268"
+      - "${JAEGER_PORT_4}:9411"
     environment:
       - SPAN_STORAGE_TYPE=elasticsearch
       - ES_SERVER_URLS=http://elasticsearch:9200
@@ -29,7 +29,7 @@ services:
     container_name: prometheus
     environment:
       # 时区上海 - Time zone Shanghai (Change if needed)
-      TZ: Asia/Shanghai
+      TZ: ${TZ}
     volumes:
       - ./deploy/prometheus/server/prometheus.yml:/etc/prometheus/prometheus.yml
       - ./data/prometheus/data:/prometheus
@@ -39,7 +39,7 @@ services:
     restart: always
     user: root
     ports:
-      - 9090:9090
+      - "${PROMETHEUS_PORT}:9090"
     networks:
       - mall_net
 
@@ -51,12 +51,12 @@ services:
     user: root
     environment:
       # 时区上海 - Time zone Shanghai (Change if needed)
-      TZ: Asia/Shanghai
+      TZ: ${TZ}
     restart: always
     volumes:
       - ./data/grafana/data:/var/lib/grafana
     ports:
-      - "3001:3000"
+      - "${GRAFANA_PORT}:3000"
     networks:
       - mall_net
 
@@ -68,7 +68,7 @@ services:
       - discovery.type=single-node
       - xpack.security.enabled=false  #禁用了 HTTPS 和身份验证(测试时候用)
       - "ES_JAVA_OPTS=-Xms1g -Xmx1g"
-      - TZ=Asia/Shanghai
+      - TZ=${TZ}
 #      - xpack.security.enabled=true
 #      - xpack.security.http.ssl.enabled=true
 #      - xpack.security.http.ssl.keystore.path=/usr/share/elasticsearch/config/certs/elastic-certificates.p12
@@ -77,8 +77,8 @@ services:
       - ./data/elasticsearch/data:/usr/share/elasticsearch/data
     restart: always
     ports:
-      - 9200:9200
-      - 9300:9300
+      - "${ELASTICSEARCH_PORT}:9200"
+      - "${ELASTICSEARCH_PORT_1}:9300"
     networks:
       - mall_net
 
@@ -88,12 +88,12 @@ services:
     container_name: kibana
     environment:
       - elasticsearch.hosts=http://elasticsearch:9200
-      - TZ=Asia/Shanghai
+      - TZ=${TZ}
     restart: always
     networks:
       - mall_net
     ports:
-      - "5601:5601"
+      - "${KIBANA_PORT}:5601"
     depends_on:
       - elasticsearch
 
@@ -104,7 +104,7 @@ services:
     container_name: go-stash
     environment:
       # 时区上海 - Time zone Shanghai (Change if needed)
-      TZ: Asia/Shanghai
+      TZ: ${TZ}
     #user: root
     restart: always
     volumes:
@@ -121,7 +121,7 @@ services:
     container_name: filebeat
     environment:
       # 时区上海 - Time zone Shanghai (Change if needed)
-      TZ: Asia/Shanghai
+      TZ: ${TZ}
     user: root
     restart: always
     entrypoint: "filebeat -e -strict.perms=false"  #解决配置文件权限问题 - Solving the configuration file permissions
@@ -142,10 +142,10 @@ services:
     container_name: zookeeper
     environment:
       # 时区上海 - Time zone Shanghai (Change if needed)
-      TZ: Asia/Shanghai
+      TZ: ${TZ}
     restart: always
     ports:
-      - 2181:2181
+      - "${ZOOKEEPER_PORT}:2181"
     networks:
       - mall_net
 
@@ -154,12 +154,12 @@ services:
     image: bitnami/kafka:3.6.2
     container_name: kafka
     ports:
-      - 9092:9092
+      - "${KAFKA_PORT}:9092"
     environment:
       - KAFKA_ADVERTISED_HOST_NAME=kafka
       - KAFKA_ZOOKEEPER_CONNECT=zookeeper:2181
       - KAFKA_AUTO_CREATE_TOPICS_ENABLE=false
-      - TZ=Asia/Shanghai
+      - TZ=${TZ}
     restart: always
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
@@ -173,7 +173,7 @@ services:
     image: hibiken/asynqmon:latest
     container_name: asynqmon
     ports:
-      - 8980:8080
+      - "${ASYNQMON_PORT}:8080"
     command:
       - '--redis-addr=redis:6379'
       - '--redis-password=G62m50oigInC30sf'
@@ -188,11 +188,11 @@ services:
     container_name: mysql
     environment:
       # 时区上海 - Time zone Shanghai (Change if needed)
-      TZ: Asia/Shanghai
+      TZ: ${TZ}
       # root 密码 - root password
-      MYSQL_ROOT_PASSWORD: ll001226
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
     ports:
-      - 33069:3306
+      - "${MYSQL_PORT}:3306"
     volumes:
       # 数据挂载 - Data mounting
       - ./data/mysql/data:/var/lib/mysql
@@ -215,10 +215,10 @@ services:
     image: redis:7.2.4
     container_name: redis
     ports:
-      - 36379:6379
+      - "${REDIS_PORT}:6379"
     environment:
       # 时区上海 - Time zone Shanghai (Change if needed)
-      TZ: Asia/Shanghai
+      TZ: ${TZ}
     volumes:
       # 数据文件 - data files
       - ./data/redis/data:/data:rw
@@ -290,7 +290,7 @@ services:
 networks:
   mall_net:
     external: true
-    driver: bridge
+    driver: ${NETWORKS_DRIVER}
     ipam:
       config:
         - subnet: 172.16.0.0/16
