@@ -33,7 +33,7 @@ CREATE TABLE `ums_member`  (
     `icon` varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '头像',
     `gender` int(1) DEFAULT NULL COMMENT '性别：0->未知；1->男；2->女',
     `birthday` date DEFAULT NULL COMMENT '生日',
-    `city` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '所做城市',
+    `city` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '所在城市',
     `job` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '职业',
     `personalized_signature` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '个性签名',
     `source_type` int(1) DEFAULT NULL COMMENT '用户来源',
